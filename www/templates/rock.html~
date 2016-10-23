@@ -1,0 +1,10 @@
+<ion-view title="Mecedor" hide-nav-bar="true" id="mecedor">
+    <ion-content padding="true" class="manual-ios-statusbar-padding">
+        <h3 id="leds-heading3" style="color:#000000;text-align:center;">Control de movimiento</h3>
+        <div class="spacer" style="width: 300px; height: 41px;"></div>
+        <form id="leds-form7" class="list">
+            <ion-toggle toggle-class="toggle-positive" ng-repeat= "item in movList" ng-model="item.checked" ng-click="request1()" ng-checked="item.checked">{{item.text}}</ion-toggle>
+        </form>
+        <div id="leds-button-bar1" class="button-bar"></div>
+    </ion-content>
+</ion-view>

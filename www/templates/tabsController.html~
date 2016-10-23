@@ -1,0 +1,16 @@
+<ion-view title="Tabs Controller" hide-nav-bar="true" hide-back-button="true" id="menu">
+    <ion-tabs class="tabs-positive tabs-icon-top" id="tabsController-tabs1">
+        <ion-tab title="Mecer" icon="ion-arrow-swap" href="#/menu/rock" id="tabsController-tab2">
+            <ion-nav-view name="tab1"></ion-nav-view>
+        </ion-tab>
+        <ion-tab title="Sonido" icon="ion-android-microphone" href="#/menu/puertas" id="tabsController-tab3">
+            <ion-nav-view name="tab2"></ion-nav-view>
+        </ion-tab>
+	<ion-tab title="Presencia" icon="android-happy" href="#/menu/proximidad" id="tabsController-tab4">
+            <ion-nav-view name="tab3"></ion-nav-view>
+        </ion-tab>
+	<ion-tab title="Salir" icon="ion-android-exit" href="#/login" id="tabsController-tab5">
+            <ion-nav-view name="tab4"></ion-nav-view>
+        </ion-tab>
+    </ion-tabs>
+</ion-view>

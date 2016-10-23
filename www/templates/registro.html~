@@ -1,0 +1,20 @@
+<ion-view title="Registro" hide-nav-bar="true" hide-back-button="true" id="signup">
+    <ion-content padding="true" style="background: url(img/wr8IAHhjRoWb5CEOUMuN_6545509_stock-vector-thin-smart-house-line-seamless-white-pattern.jpg) no-repeat center;background-size:cover;" class="manual-ios-statusbar-padding">
+        <h1 id="registro-heading2" style="color:#000000;font-weight:400;text-align:center;">MyPlace</h1>
+        <form id="registro-form5" class="list" ng-submit="registerForm(newUser)">
+            <div class="spacer" style="width: 300px; height: 39px;"></div>
+            <ion-list id="registro-list6">
+                <label class="item item-input item-stacked-label" id="registro-input10">
+                    <span class="input-label">Usuario</span>
+                    <input type="text" placeholder="" ng-model="newUser.user">
+                </label>
+                <label class="item item-input item-stacked-label" id="registro-input11">
+                    <span class="input-label">Contraseña</span>
+                    <input type="password" placeholder="" ng-model="newUser.pass">
+                </label>
+            </ion-list>
+            <div class="spacer" style="width: 300px; height: 44px;"></div>
+            <input type="submit" id="registro-button8" style="font-weight:600;" class="button button-positive  button-block" value="Registrar">
+        </form>
+    </ion-content>
+</ion-view>
