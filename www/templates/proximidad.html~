@@ -1,8 +1,8 @@
-<ion-view title="SonidoProx" hide-nav-bar="true" hide-back-button="true" id="sonidoprox">
+<ion-view title="Proximidad" hide-nav-bar="true" hide-back-button="true" id="prox">
     <ion-content padding="true" class="manual-ios-statusbar-padding">
-        <h3 id="puertas-heading4" style="color:#000000;text-align:center;">Estado interior de la cuna</h3>
+        <h3 id="prox-heading4" style="color:#000000;text-align:center;">Estado interior de la cuna</h3>
         <div class="spacer" style="width: 300px; height: 47px;"></div>
-        <ion-list id="puertas-list7">
+        <ion-list id="prox-list7">
 
             <ion-item class="item item-icon-right" ng-repeat= "item in doorList">{{ item.text }}
                 <i class={{item.icon}}></i> 

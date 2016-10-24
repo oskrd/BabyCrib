@@ -10,7 +10,7 @@ angular.module('app.routes', [])
     
   
 
-      .state('tabsController.rock', {
+      .state('tabsController.rocking', {
     url: '/rocking',
     views: {
       'tab1': {
@@ -20,20 +20,20 @@ angular.module('app.routes', [])
     }
   })
 
-  .state('tabsController.puertas', {
-    url: '/puertas',
+  .state('tabsController.sound', {
+    url: '/sound',
     views: {
-      'tab3': {
-        templateUrl: 'templates/puertas.html',
-        controller: 'puertasCtrl'
+      'tab2': {
+        templateUrl: 'templates/sonido.html',
+        controller: 'sonidoCtrl'
       }
     }
   })
 
   .state('tabsController.prox', {
-    url: '/proximidad',
+    url: '/prox',
     views: {
-      'tab4': {
+      'tab3': {
         templateUrl: 'templates/proximidad.html',
         controller: 'proxCtrl'
       }

@@ -1,16 +1,16 @@
 <ion-view title="Login" hide-nav-bar="true" hide-back-button="true" cache-view="false" id="login">
-    <ion-content padding="true" style="background: url(img/wr8IAHhjRoWb5CEOUMuN_6545509_stock-vector-thin-smart-house-line-seamless-white-pattern.jpg) no-repeat center;background-size:cover;" class="manual-ios-statusbar-padding">
+    <ion-content padding="true" style="background: url(img/photo208350749475845763.jpg) no-repeat center;background-size:cover;" class="manual-ios-statusbar-padding">
         <h1 id="login-heading1" style="color:#000000;font-weight:400;text-align:center;">MyBabyCrib</h1>
         <form id="login-form3" class="list" ng-submit="loginForm(user)">
             <div class="spacer" style="width: 300px; height: 43px;"></div>
             <ion-list id="login-list4">
                 <label class="item item-input item-stacked-label" id="login-input5">
                     <span class="input-label">Usuario</span>
-                    <input type="text" placeholder="" ng-model="user.user">
+                    <input type="text" placeholder="" ng-model="user.user"/>
                 </label>
                 <label class="item item-input item-stacked-label" id="login-input6">
                     <span class="input-label">Contraseña</span>
-                    <input type="password" placeholder="" ng-model="user.pass">
+                    <input type="password" placeholder="" ng-model="user.pass"/>
                 </label>
             </ion-list>
             <div class="spacer" style="width: 300px; height: 44px;"></div>

@@ -15,133 +15,79 @@ angular.module('app.controllers', ['ngResource'])
                 }
             }
 
-            /*$scope.request1 = function () {
-                HttpPost2.leds({"num": "1", "valor": $scope.cambiar($scope.ledList[0].checked)}, function (data) {
-                    console.log(data);
-                }, function (err){console.log(err)});
-                HttpPost2.leds({"num": "2", "valor": $scope.cambiar($scope.ledList[1].checked)}, function () {}, function (){});
-                HttpPost2.leds({"num": "3", "valor": $scope.cambiar($scope.ledList[2].checked)}, function () {}, function (){});
-                HttpPost2.leds({"num": "4", "valor": $scope.cambiar($scope.ledList[3].checked)}, function () {}, function (){});
-                HttpPost2.leds({"num": "5", "valor": $scope.cambiar($scope.ledList[4].checked)}, function () {}, function (){});
-            }
-           
+	    $scope.request1 = function () {
+                HttpGet.getSonido().then(function (response) {
+                    $scope.crying = response;
+                    console.log('Sonido ->', $scope.crying);
+                });
+            };
+            $scope.request1();
 
-            HttpGet.getLuces().then(function(response) {
-            $scope.luces = response;
-            //console.log('luces ->',$scope.luces);
+	    $scope.request2 = function () {
+                HttpGet.getProximidad().then(function (response) {
+                    $scope.proximidad = response;
+                    console.log('proximidad ->', $scope.proximidad);
+                });
+            };
+            $scope.request2();
 
-            if ($scope.luces.led1 === 1){
-                $scope.ledList[0].checked= true;
+            if ($scope.proximidad === 0 && $scope.crying === "1"){
+                $scope.movList=  [{text: "Estado Mecedor", checked: true}];
             } else{
-                $scope.ledList[0].checked= false;
-            }
-            if ($scope.luces.led2 === 1){
-                $scope.ledList[1].checked= true;
-            } else{
-                $scope.ledList[1].checked= false;
-            }
-            if ($scope.luces.led3 === 1){
-                $scope.ledList[2].checked= true;
-            } else{
-                $scope.ledList[2].checked= false;
-            }
-            if ($scope.luces.led4 === 1){
-                $scope.ledList[3].checked= true;
-            } else{
-                $scope.ledList[3].checked= false;
-            }
-            if ($scope.luces.led5 === 1){
-                $scope.ledList[4].checked= true;
-            } else{
-                $scope.ledList[4].checked= false;
+                $scope.movList=  [{text: "Estado Mecedor", checked: false}];
             }
             $ionicLoading.hide();
-            });*/
+
+            $scope.request = function () {
+                HttpPost2.mov({"valor": $scope.cambiar($scope.movList[0].checked)}, function (data) {
+                    console.log(data);
+                }, function (err){console.log(err)});
+            }
                       
 	$ionicLoading.hide();
 })
 
-        .controller('puertasCtrl', function ($scope, $ionicLoading, HttpGet) {
+        .controller('sonidoCtrl', function ($scope, $ionicLoading, HttpGet) {
+	    $scope.soundList = [{text: "Sonido en la cuna", icon: "icon ion-android-volume-off"}];
+	    $ionicLoading.show({
+                template: 'Cargando...'
+            });
             $scope.request = function () {
-                HttpGet.getPuertas().then(function (response) {
-                    $scope.puertas = response;
-                    console.log('puertas ->', $scope.puertas);
-                    $scope.doorList = [{text: "Puerta principal", icon: "icon ion-unlocked"},
-                        {text: "Terraza", icon: "icon ion-locked"}, {text: "Puerta trasera", icon: "icon ion-locked"},
-                        {text: "Garaje", icon: "icon ion-locked"}];
-                    if ($scope.puertas.p1 === 0) {
-                        $scope.doorList[0].icon = "icon ion-locked";
+                HttpGet.getSonido().then(function (response) {
+                    $scope.crying = response;
+                    console.log('Sonido ->', $scope.crying);
+                    if ($scope.crying === "0") {
+                        $scope.soundList[0].icon = "icon ion-android-volume-off";
                     } else {
-                        $scope.doorList[0].icon = "icon ion-unlocked";
-                    }
-                    if ($scope.puertas.p2 === 0) {
-                        $scope.doorList[1].icon = "icon ion-locked";
-                    } else {
-                        $scope.doorList[1].icon = "icon ion-unlocked";
-                    }
-                    if ($scope.puertas.p3 === 0) {
-                        $scope.doorList[2].icon = "icon ion-locked";
-                    } else {
-                        $scope.doorList[2].icon = "icon ion-unlocked";
-                    }
-                    if ($scope.puertas.p4 === 0) {
-                        $scope.doorList[3].icon = "icon ion-locked";
-                    } else {
-                        $scope.doorList[3].icon = "icon ion-unlocked";
+                        $scope.soundList[0].icon = "icon ion-android-volume-up";
                     }
                     $ionicLoading.hide();
                 });
             };
             $scope.request();
+//$scope.doorList = [{text: "Puerta principal", icon: "icon ion-android-volume-off"},
+  //                      {text: "Terraza", icon: "icon ion-android-volume-up"},{text: "Puerta principal", icon: "icon ion-android-checkmark-circle"},
+ //                       {text: "Terraza", icon: "icon ion-close-circled"}];
         })
 
 	.controller('proxCtrl', function ($scope, $ionicLoading, HttpGet) {
+	    $scope.proximityList = [{text: "Bebé en la cuna", icon: "icon ion-close-circled"}];
+	    $ionicLoading.show({
+                template: 'Cargando...'
+            });
             $scope.request = function () {
                 HttpGet.getProximidad().then(function (response) {
                     $scope.proximidad = response;
-                    console.log('proximidad ->', $scope.proximidad);
-                    $scope.doorList = [{text: "Puerta principal", icon: "icon ion-unlocked"},
-                        {text: "Terraza", icon: "icon ion-locked"}, {text: "Puerta trasera", icon: "icon ion-locked"},
-                        {text: "Garaje", icon: "icon ion-locked"}];
-                    if ($scope.puertas.p1 === 0) {
-                        $scope.doorList[0].icon = "icon ion-locked";
+                    //console.log('proximidad ->', $scope.proximidad);
+                    if ($scope.proximidad === 0) {
+                        $scope.proximityList[0].icon = "icon ion-close-circled";
                     } else {
-                        $scope.doorList[0].icon = "icon ion-unlocked";
-                    }
-                    if ($scope.puertas.p2 === 0) {
-                        $scope.doorList[1].icon = "icon ion-locked";
-                    } else {
-                        $scope.doorList[1].icon = "icon ion-unlocked";
-                    }
-                    if ($scope.puertas.p3 === 0) {
-                        $scope.doorList[2].icon = "icon ion-locked";
-                    } else {
-                        $scope.doorList[2].icon = "icon ion-unlocked";
-                    }
-                    if ($scope.puertas.p4 === 0) {
-                        $scope.doorList[3].icon = "icon ion-locked";
-                    } else {
-                        $scope.doorList[3].icon = "icon ion-unlocked";
+                        $scope.proximityList[0].icon = "icon ion-android-checkmark-circle";
                     }
                     $ionicLoading.hide();
                 });
             };
             $scope.request();
-        })
-
-	
-        .controller('camaraCtrl', function ($scope, HttpGet) {
-
-            //$scope.$on('clicked', function () { $ionicSideMenuDelegate.canDragContent(true) });
-            $scope.request = function () {
-                HttpGet.getFoto().then(function (response) {
-                    $scope.pic = response;
-                    console.log('Foto ->', $scope.pic);
-
-                    document.getElementById("img").src = "data:image/png;base64, " + $scope.pic;
-
-                });
-            };
         })
 
         .controller('loginCtrl', ['$scope', '$state', '$stateParams', '$ionicPopup', '$timeout', '$ionicSideMenuDelegate', 'HttpPost', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
