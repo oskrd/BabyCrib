@@ -15,37 +15,27 @@ angular.module('app.controllers', ['ngResource'])
                 }
             }
 
-	    $scope.request1 = function () {
-                HttpGet.getSonido().then(function (response) {
-                    $scope.crying = response;
-                    console.log('Sonido ->', $scope.crying);
+	    $scope.request = function () {
+                HttpGet.getMecer().then(function (response) {
+                    $scope.mecer = response;
+                    console.log('Meciendo ->', $scope.mecer);
+                    if ($scope.mecer === "0") {
+                        $scope.movList[0].checked = false;
+                    } else {
+                        $scope.movList[0].checked = true;
+                    }
+                    $ionicLoading.hide();
                 });
             };
-            $scope.request1();
+            $scope.request();
 
-	    $scope.request2 = function () {
-                HttpGet.getProximidad().then(function (response) {
-                    $scope.proximidad = response;
-                    console.log('proximidad ->', $scope.proximidad);
-                });
-            };
-            $scope.request2();
-
-            if ($scope.proximidad === 0 && $scope.crying === "1"){
-                $scope.movList=  [{text: "Estado Mecedor", checked: true}];
-            } else{
-                $scope.movList=  [{text: "Estado Mecedor", checked: false}];
-            }
-            $ionicLoading.hide();
-
-            $scope.request = function () {
+            $scope.request1 = function () {
                 HttpPost2.mov({"valor": $scope.cambiar($scope.movList[0].checked)}, function (data) {
                     console.log(data);
                 }, function (err){console.log(err)});
-            }
-                      
-	$ionicLoading.hide();
-})
+		$ionicLoading.hide();
+            };	
+	})
 
         .controller('sonidoCtrl', function ($scope, $ionicLoading, HttpGet) {
 	    $scope.soundList = [{text: "Sonido en la cuna", icon: "icon ion-android-volume-off"}];

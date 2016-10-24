@@ -3,22 +3,21 @@ var server = 'http://192.168.0.14:69';
 angular.module('app.services', [])
         .factory('HttpGet', function ($http) {
             return {
-             /*   getMecer: function () {
+                getMecer: function () {
                     // $http returns a promise, which has a then function, which also returns a promise.
                     var part = '/rock';
                     var url = server.concat(part);
                     console.log('Solicito: ', url)
-                    return $http.get(url)
-                            .then(function (response) {
-                                // In the response, resp.data contains the result. Check the console to see all of the data returned.
-                                console.log('Get mecer', response);
-                                return response.data;
-                            });
-                },*/
+                    return $http.get(url).then(function (response) {
+                        // In the response, resp.data contains the result. Check the console to see all of the data returned.
+                        console.log('Get mecer', response, response.data);
+                        return response.data.rock;
+                    })
+                },
                 getSonido: function () {
                     var part = '/crying';
                     var url = server.concat(part);
-                    console.log('Solicito: ', url);
+                    //console.log('Solicito: ', url);
                     return $http.get(url).then(function (response) {
                         //console.log('Get sonido', response, response.data);
                         return response.data.crying;

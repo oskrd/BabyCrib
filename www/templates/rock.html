@@ -5,6 +5,7 @@
         <form id="rock-form7" class="list">
             <ion-toggle toggle-class="toggle-positive" ng-repeat= "item in movList" ng-model="item.checked" ng-click="request1()" ng-checked="item.checked">{{item.text}}</ion-toggle>
         </form>
-        <div id="rock-button-bar1" class="button-bar"></div>
+        <div class="spacer" style="width: 300px; height: 55px;"></div>
+        <button id="rock-button10" class="button button-positive  button-block" ng-click="request()">Actualizar</button>
     </ion-content>
 </ion-view>

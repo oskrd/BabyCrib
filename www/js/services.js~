@@ -18,9 +18,9 @@ angular.module('app.services', [])
                 getSonido: function () {
                     var part = '/crying';
                     var url = server.concat(part);
-                    console.log('Solicito: ', url);
+                    //console.log('Solicito: ', url);
                     return $http.get(url).then(function (response) {
-                        console.log('Get sonido', response, response.data);
+                        //console.log('Get sonido', response, response.data);
                         return response.data.crying;
                     })
                 },
