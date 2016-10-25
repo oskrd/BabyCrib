@@ -62,13 +62,16 @@ void loop() {
   #endif
   client.flush();
 
-  JsonObject & json = processRequest(req);
-  if (req.indexOf("GET") != -1)
-    writeResponse(client, json);
-  else if (req.indexOf("POST") != -1)
+  char state = processRequest(req);
+  if (state == 's')
     writeOk(client);
-  else
+  else if (state == 'w')
     writeBadResponse(client);
+  else{
+    JsonObject & json = generateJson(jsonBuffer, state);
+    writeResponse(client, json);
+  }
+    
   delay(1);
   #ifdef DEBUG
     Serial.println("Client disonnected");
@@ -95,51 +98,51 @@ int isCradling() {
   return result;
 }
 
-JsonObject & processRequest(String & req) {
+char processRequest(String & req) {
   if (req.indexOf("GET") != -1) {
     if ( req.indexOf("/proximity") != -1) {
-      JsonObject & json = generateJson(jsonBuffer, 'p');
-      return json;
+      //JsonObject & json = generateJson(jsonBuffer, 'p');
+      return 'p';
     }
     else if (req.indexOf("/crying") != -1) {
-      JsonObject & json = generateJson(jsonBuffer, 'c');
-      return json;
+      //JsonObject & json = generateJson(jsonBuffer, 'c');
+      return 'c';
     }
     else if (req.indexOf("/movement") != -1) {
-      JsonObject & json = generateJson(jsonBuffer, 'm');
-      return json;
+      //JsonObject & json = generateJson(jsonBuffer, 'm');
+      return 'm';
     }
     else {
       Serial.println("invalid request");
       client.stop();
-      return jsonBuffer.createObject();
+      return 'w'; //wrong
     }
   }
   else if (req.indexOf("POST") != -1) {
-    if ( req.indexOf("/users/signin") != -1) {
+    if ( req.indexOf("/users/signin HTTP") != -1) {
       Serial.println(req.indexOf("user="));
       Serial.println(req.indexOf("pass="));
-      return jsonBuffer.createObject();
+      return 's'; //success
     }
     else if (req.indexOf("/users/login HTTP") != -1) {
       Serial.println(req.indexOf("user="));
       Serial.println(req.indexOf("pass="));
-      return jsonBuffer.createObject();
+      return 's'; //success
     }
-    else if (req.indexOf("/movement") != -1) {
+    else if (req.indexOf("/movement HTTP") != -1) {
       Serial.println(req.indexOf("engine="));
-      return jsonBuffer.createObject();
+      return 's'; //success
     }
     else {
       Serial.println("invalid request");
       client.stop();
-      return jsonBuffer.createObject();
+      return 'w'; //wrong
     }
   }
   else {
     Serial.println("invalid request");
     client.stop();
-    return jsonBuffer.createObject();
+    return 'w'; //wrong
   }
 
 }
