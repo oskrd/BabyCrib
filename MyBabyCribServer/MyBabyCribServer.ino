@@ -1,6 +1,12 @@
 /*
- * WebServer for ESP8266 using Json
- * Based on Json Web Server by Benoit Blanchon. Whom inspired by "Web Server" from David A. Mellis and Tom Igoe
+   WebServer for ESP8266 using Json
+   Author: Oscar D. Carmona C.
+
+   Interact with ultrasonic sensor HC-SR04, sound level with xxx and movement of a servomotor.
+
+   Based on Json Web Server by Benoit Blanchon. Whom inspired by "Web Server" from David A. Mellis and Tom Igoe
+   Reference:
+            http://www.esp8266.com/viewtopic.php?f=29&t=7158&sid=070adece90872079244c9b44c7b8a904
 */
 
 #include <ESP8266WiFi.h>
@@ -8,7 +14,8 @@
 
 #define DEBUG
 
-int n = 0;
+int n, n1 = 0;
+int engine = 0;
 
 const char * ssid = "Los Hijos de Vicky";
 const char * pass = "fofo1234";
@@ -23,10 +30,10 @@ void setup() {
   WiFi.mode(WIFI_STA);
   WiFi.disconnect();
   delay(100);
-#ifdef DEBUG
-  Serial.print("Connecting to ");
-  Serial.println(ssid);
-#endif
+  #ifdef DEBUG
+    Serial.print("Connecting to ");
+    Serial.println(ssid);
+  #endif
   WiFi.begin(ssid, pass);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
@@ -42,26 +49,30 @@ void loop() {
   if (!client)
     return;
 
-#ifdef DEBUG
-  Serial.println("new client request");
-#endif
+  #ifdef DEBUG
+    Serial.println("new client request");
+  #endif
 
   while (!client.available())
     delay(1);
 
   String req = client.readString();
-#ifdef DEBUG
-  Serial.println(req);
-#endif
+  #ifdef DEBUG
+    Serial.println(req);
+  #endif
   client.flush();
 
   JsonObject & json = processRequest(req);
-  writeResponse(client, json);
-
+  if (req.indexOf("GET") != -1)
+    writeResponse(client, json);
+  else if (req.indexOf("POST") != -1)
+    writeOk(client);
+  else
+    writeBadResponse(client);
   delay(1);
-#ifdef DEBUG
-  Serial.println("Client disonnected");
-#endif
+  #ifdef DEBUG
+    Serial.println("Client disonnected");
+  #endif
   client.stop();
 }
 
@@ -72,6 +83,17 @@ int isMoving() {
   return result;
 }
 
+int isCry() {
+  int result = n1 ? 0 : 1;
+  n1 = !n1;
+  return result;
+}
+
+int isCradling() {
+  int result = engine ? 0 : 1;
+  engine = !engine;
+  return result;
+}
 
 JsonObject & processRequest(String & req) {
   if (req.indexOf("GET") != -1) {
@@ -83,6 +105,10 @@ JsonObject & processRequest(String & req) {
       JsonObject & json = generateJson(jsonBuffer, 'c');
       return json;
     }
+    else if (req.indexOf("/movement") != -1) {
+      JsonObject & json = generateJson(jsonBuffer, 'm');
+      return json;
+    }
     else {
       Serial.println("invalid request");
       client.stop();
@@ -91,16 +117,18 @@ JsonObject & processRequest(String & req) {
   }
   else if (req.indexOf("POST") != -1) {
     if ( req.indexOf("/users/signin") != -1) {
-      JsonObject & json = generateJson(jsonBuffer, 'p');
-      return json;
+      Serial.println(req.indexOf("user="));
+      Serial.println(req.indexOf("pass="));
+      return jsonBuffer.createObject();
     }
-    else if (req.indexOf("/users/login") != -1) {
-      JsonObject & json = generateJson(jsonBuffer, 'p');
-      return json;
+    else if (req.indexOf("/users/login HTTP") != -1) {
+      Serial.println(req.indexOf("user="));
+      Serial.println(req.indexOf("pass="));
+      return jsonBuffer.createObject();
     }
     else if (req.indexOf("/movement") != -1) {
-      JsonObject & json = generateJson(jsonBuffer, 'p');
-      return json;
+      Serial.println(req.indexOf("engine="));
+      return jsonBuffer.createObject();
     }
     else {
       Serial.println("invalid request");
@@ -122,7 +150,10 @@ JsonObject& generateJson(JsonBuffer& jsonBuffer, char choice) {
     root["proximity"] = isMoving();
   }
   else if (choice == 'c') {
-    root["crying"] = String(isMoving());
+    root["crying"] = String(isCry());
+  }
+  else if (choice == 'm') {
+    root["movement"] = String(isCradling());
   }
   return root;
 }
@@ -130,11 +161,25 @@ JsonObject& generateJson(JsonBuffer& jsonBuffer, char choice) {
 
 void writeResponse(WiFiClient& client, JsonObject& json) {
   String headers = "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n";
-  headers += "Connection: close\r\n";
+  headers += "Access-Control-Allow-Origin: *\r\nConnection: close\r\n";
   client.println(headers);
-#ifdef DEBUG
-  json.printTo(Serial);
-#endif
-  json.prettyPrintTo(client);
+  #ifdef DEBUG
+    json.printTo(Serial);
+    delay(111);
+  #else
+    delay(333);
+  #endif
+    json.prettyPrintTo(client);
 }
 
+void writeOk(WiFiClient& client) {
+  String headers = "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n";
+  headers += "Access-Control-Allow-Origin: *\r\nConnection: close\r\n";
+  client.println(headers);
+}
+
+void writeBadResponse(WiFiClient& client) {
+  String headers = "HTTP/1.1 404 Not Found\r\nContent-Type: application/json\r\n";
+  headers += "Access-Control-Allow-Origin: *\r\nConnection: close\r\n";
+  client.println(headers);
+}
