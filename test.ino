@@ -4,6 +4,9 @@
 
 #define DEBUG
 
+#define trig 12
+#define echo 13
+
 int n, n1 = 0;
 int engine = 0;
 
@@ -13,11 +16,6 @@ int audioPin=A0;
 int audioThreshold=40;
 int audioAverage=0;
 int audiotest=0;
-
-
-
-
-
 
 
 const char * ssid = "Los 26";
@@ -30,6 +28,9 @@ StaticJsonBuffer<500> jsonBuffer;
 void setup() {
   Serial.begin(115200);
    pinMode(audioPin,INPUT);   
+   pinMode(trig, OUTPUT);
+pinMode(echo, INPUT);
+
   WiFi.mode(WIFI_STA);
   WiFi.disconnect();
   delay(100);
@@ -51,15 +52,19 @@ void setup() {
 
 void loop() {
   WiFiClient client = server.available();
-  if (!client)
+  if (!client){
+    Serial.println("tetetetetetetetete");
     return;
+    
+    }
 
   #ifdef DEBUG
     Serial.println("new client request");
   #endif
 
-  while (!client.available())
+  while (!client.available()){
     delay(1);
+    Serial.println("test0");}
 
   String req = client.readString();
   #ifdef DEBUG
@@ -82,14 +87,18 @@ void loop() {
     Serial.println("Client disonnected");
   #endif
   client.stop();
+
+  Serial.println("test4");
+
+  
 }
 
 //Tester method
-int isMoving() {
+/*int isMoving() {
   int result = n ? 0 : 1;
   n = !n;
   return result;
-}
+}*/
 
 /*int isCry() {
   int result = n1 ? 0 : 1;
@@ -216,7 +225,6 @@ int isCry(){
    testValue=getSound();
    if((testValue > (audioAverage + audioThreshold))||(testValue < (audioAverage - audioThreshold))){
    audioFlag=1;
-   Serial.println("----------------------------------------------------------ruido");
    audiotest=testValue;
    }
    return audioFlag;
@@ -236,7 +244,39 @@ void setAudioAverage(int cycles){
 
   }
 
+int isMoving()
+{
 
+int trigPin=trig; int echoPin=echo;
+//Devuelve la distancia detectada por el sensor en centimetros o
+//en pulgadas
+ 
+int duracion;
+int medida;
+ 
+//En la documentacion establece que para iniciar una medicion
+//hay que suministrar un pulso de 10 microsegundos
+digitalWrite(trigPin, LOW);
+delayMicroseconds(2);
+digitalWrite(trigPin, HIGH);
+delayMicroseconds(10);
+digitalWrite(trigPin, LOW);
+ 
+//Calcula el tiempo que tarda en recibir el eco
+duracion = pulseIn(echoPin, HIGH);
+ 
+//Si metric es cierto, devuelve la distancia en centimetros.
+//Si no, devuelve la distancia en pulgadas.
+//Aplicamos las formulas que aparecen en la documentacion
+ 
+medida = duracion/58;
+
+int retorno = 0;
+
+if(medida > 12 && medida < 18){retorno = 1;}
+return retorno;
+
+}
 
 
 
