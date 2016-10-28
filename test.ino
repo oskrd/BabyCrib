@@ -18,6 +18,10 @@ int audioAverage=0;
 int audiotest=0;
 
 
+int servoPin = 4; 
+int moving=0;
+
+
 const char * ssid = "Los 26";
 const char * pass = "roldanquierepene";
 
@@ -30,6 +34,7 @@ void setup() {
    pinMode(audioPin,INPUT);   
    pinMode(trig, OUTPUT);
 pinMode(echo, INPUT);
+pinMode(servoPin,OUTPUT);
 
   WiFi.mode(WIFI_STA);
   WiFi.disconnect();
@@ -53,7 +58,14 @@ pinMode(echo, INPUT);
 void loop() {
   WiFiClient client = server.available();
   if (!client){
-    Serial.println("tetetetetetetetete");
+
+    if( (isMoving()==1) && (isCry()==1) ){
+      moving=1;
+      swing();delay(2000);}
+
+    
+
+    
     return;
     
     }
@@ -63,8 +75,7 @@ void loop() {
   #endif
 
   while (!client.available()){
-    delay(1);
-    Serial.println("test0");}
+    delay(1);}
 
   String req = client.readString();
   #ifdef DEBUG
@@ -87,30 +98,16 @@ void loop() {
     Serial.println("Client disonnected");
   #endif
   client.stop();
-
-  Serial.println("test4");
-
   
 }
 
 //Tester method
-/*int isMoving() {
-  int result = n ? 0 : 1;
-  n = !n;
-  return result;
-}*/
 
-/*int isCry() {
-  int result = n1 ? 0 : 1;
-  n1 = !n1;
-  return result;
-}*/
-
-int isCradling() {
+/*int isCradling() {
   int result = engine ? 0 : 1;
   engine = !engine;
   return result;
-}
+}*/
 
 char processRequest(String & req) {
   if (req.indexOf("GET") != -1) {
@@ -170,7 +167,7 @@ JsonObject& generateJson(JsonBuffer& jsonBuffer, char choice) {
     root["crying"] = String(isCry());
   }
   else if (choice == 'm') {
-    root["movement"] = String(isCradling());
+    root["movement"] = String(moving);
   }
   return root;
 }
@@ -277,6 +274,33 @@ if(medida > 12 && medida < 18){retorno = 1;}
 return retorno;
 
 }
+
+
+void servoMove (int angle)
+{
+   float pause;
+   pause = angle*2000.0/180.0 + 500;
+   digitalWrite(servoPin, HIGH);
+   delayMicroseconds(pause);
+   digitalWrite(servoPin, LOW);
+   delayMicroseconds(25000-pause);
+}
+
+void swing(){
+ int pos=0;
+for (pos = 90; pos <= 115; pos += 1) { // goes from 0 degrees to 180 degrees
+    servoMove(pos);              // tell servo to go to position in variable 'pos'
+    delay(35);                       // waits 15ms for the servo to reach the position
+  }
+  for (pos = 115; pos >= 65; pos -= 1) { // goes from 180 degrees to 0 degrees
+    servoMove(pos);              // tell servo to go to position in variable 'pos'
+    delay(35);                       // waits 15ms for the servo to reach the position
+  }
+  for (pos = 65; pos <= 90; pos += 1) { // goes from 0 degrees to 180 degrees
+    servoMove(pos);              // tell servo to go to position in variable 'pos'
+    delay(35);                       // waits 15ms for the servo to reach the position
+  }
+  }
 
 
 
