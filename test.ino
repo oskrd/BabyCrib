@@ -20,7 +20,7 @@ int audiotest=0;
 
 int servoPin = 4; 
 int moving=0;
-
+int motorEnabler=0;
 
 const char * ssid = "Los 26";
 const char * pass = "roldanquierepene";
@@ -59,17 +59,19 @@ void loop() {
   WiFiClient client = server.available();
   if (!client){
 
-    if( (isMoving()==1) && (isCry()==1) ){
-      moving=1;
-      swing();delay(2000);}
 
+    if(motorEnabler>0)
+    {swing();delay(20);motorEnabler--;}
     
+    else if( ((isMoving()==1) && (isCry()==1)) && (motorEnabler==0) )
+    {moving=1;motorEnabler=5;}
+    
+    else
+    {moving=0;}
 
-    
     return;
-    
-    }
 
+    }
   #ifdef DEBUG
     Serial.println("new client request");
   #endif
