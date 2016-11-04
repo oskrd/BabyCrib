@@ -110,10 +110,7 @@ void loop() {
 
 	char state = processRequest(req);
 	StaticJsonBuffer<500> jsonBuffer;
-	if (state == 's'){
-		writeOk(client);
-	}
-	else if (state == 'w'){
+	if (state == 'w'){
 		writeBadResponse(client);
 	}
 	else if (state == 'l'){
@@ -157,14 +154,11 @@ char processRequest(String & req) {
 	}
 	else if (req.indexOf("POST") != -1) {
 		postt=1;
-		if ( req.indexOf("/users/signin HTTP") != -1) {
-			Serial.println(req.indexOf("user="));
-			Serial.println(req.indexOf("pass="));
-			return 's';
-		}
-		else if (req.indexOf("/users/login HTTP") != -1) {
-			Serial.println(req.indexOf("user="));
-			Serial.println(req.indexOf("pass="));
+		if (req.indexOf("/usuarios/login HTTP") != -1) {
+			#ifdef DEBUG
+			  Serial.println(req.indexOf("user"));
+			  Serial.println(req.indexOf("pass"));
+      #endif
 			return 'l';
 		}
 		else if (req.indexOf("/movement HTTP") != -1) {
