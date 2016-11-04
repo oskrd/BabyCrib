@@ -34,8 +34,8 @@ int medida=0;
 int rUltra = 0;
 
 
-const char * ssid = "Los 26";
-const char * pass = "roldanquierepene";
+const char * ssid = "FallasAP";
+const char * pass = "F deimos";
 
 WiFiServer server(69);
 WiFiClient client;
@@ -167,6 +167,10 @@ void setAudioAverage(int cycles){
 
 int isMoving()
 {
+  int tot=0;
+  int i =0;
+while(i<10){
+  
 digitalWrite(trigPin, LOW);
 delayMicroseconds(2);
 digitalWrite(trigPin, HIGH);
@@ -174,8 +178,12 @@ delayMicroseconds(10);
 digitalWrite(trigPin, LOW);
 duracion = pulseIn(echoPin, HIGH);
 medida = duracion/58;
+if(medida >50){}
+else{tot = tot+medida;i++;}
+}
+medida=tot/10;
 rUltra = 0;
-if(medida > 12 && medida < 18){rUltra = 1;}
+if(medida > 4 && medida < 20){rUltra = 1;}
 return rUltra;
 
 }
