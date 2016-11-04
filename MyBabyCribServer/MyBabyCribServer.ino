@@ -1,3 +1,15 @@
+/*
+   WebServer for ESP8266 using Json
+   Author: Oscar D. Carmona C.
+
+   Interact with ultrasonic sensor HC-SR04, sound level with xxx and movement of a servomotor.
+   Authors: Greivin Fallas, Mario Monge
+
+   Based on Json Web Server by Benoit Blanchon. Whom inspired by "Web Server" from David A. Mellis and Tom Igoe
+   Reference:
+            http://www.esp8266.com/viewtopic.php?f=29&t=7158&sid=070adece90872079244c9b44c7b8a904
+*/
+
 #include <ESP8266WiFi.h>
 #include <ArduinoJson.h>
 
@@ -8,7 +20,6 @@
 #define trig 12  
 #define echo 13
 
-int n, n1 = 0;
 int engine = 0;
 
 int postt=0;
@@ -228,7 +239,7 @@ void writeResponse(WiFiClient& client, JsonObject& json) {
 bool postData(String & req, char type) {
 	//for login data
 	if (type == 'l') {
-		String req2 = &req;
+		String req2 = req;
 		int from = req.indexOf("\"user\":\"");
 		req = req.substring(from+8);
 		int endUsr = req.indexOf("\"");
